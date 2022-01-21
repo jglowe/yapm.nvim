@@ -17,13 +17,13 @@ local add = function(plugin)
     local settings = require("yapm.get_settings")()
     local slash_index = string.find(plugin, "/")
     local plugin_name = string.sub(plugin, slash_index + 1, string.len(plugin))
-    local plugin_destination = settings.git.add.packages_path .. "/" ..
+    local plugin_destination = settings.git.packages_path .. "/" ..
                                    plugin_name
 
     if vim.fn.isdirectory(plugin_destination) == 0 then
         local git_executable = settings.git.executable
         local git_options = settings.git.add.options
-        local repo_path = settings.git.add.repo_path
+        local repo_path = settings.git.repo_path
         local plugin_url = "https://github.com/" .. plugin .. ".git"
         local output = vim.fn.system("pushd " .. repo_path .. "; " ..
                                          git_executable .. " " .. git_options ..
@@ -34,7 +34,6 @@ local add = function(plugin)
     else
         print("Plugin is already there")
     end
-
 end
 
 return add

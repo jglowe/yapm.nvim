@@ -14,6 +14,7 @@
 -- The function to load plugins
 --------------------------------------------------------------------------------
 
+local add = require("yapm.add")
 local state = require("yapm.state")
 
 local load_plugin = function(plugin)
@@ -36,6 +37,17 @@ local load = function(plugin)
         plugin_name = string.sub(plugin, slash_index + 1, string.len(plugin))
     else
         plugin_name = plugin
+    end
+
+    local settings = state.get_settings()
+
+    -- If enabled and the plugin name inclues the git user/path, it will add
+    -- newly specified plugins via the add function
+    if settings.add_new_plugins and slash_index ~= nil then
+        local plugin_folder = settings.git.repo_path .. "/" ..
+                                  settings.git.packages_path .. "/" ..
+                                  plugin_name
+        if vim.fn.isdirectory(plugin_folder) == 0 then add(plugin) end
     end
 
     -- keep track of the plugins that are loaded and prevent them from being

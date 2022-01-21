@@ -20,12 +20,13 @@ local state = require("yapm.state")
 
 local setup = function(settings)
     local defaults = {
+        add_new_plugins = true,
         git = {
             executable = "git",
+            repo_path = vim.env.HOME,
+            packages_path = ".config/nvim/pack/all/opt",
             add = {
                 options = "--git-dir=$HOME/.dotfiles/ --work-tree=$HOME",
-                repo_path = vim.env.HOME,
-                packages_path = ".config/nvim/pack/all/opt"
             },
             update = {command = "pull", options = ""}
         }
