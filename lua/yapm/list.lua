@@ -16,7 +16,6 @@
 local load_plugin = require("yapm.load")
 local state = require("yapm.state")
 
--- load_plugin("plenary.nvim")
 
 local close_popup = function()
     pcall(vim.api.nvim_win_close, state.get_popup_id(), true)
@@ -25,26 +24,29 @@ local close_popup = function()
 end
 
 local open_popup = function()
+
+    load_plugin("plenary.nvim")
+
     local plugin_list = state.get_loaded_plugins()
 
     table.insert(plugin_list, 1, "Installed Plugins")
     table.insert(plugin_list, 2, "")
 
---    local popup = require("plenary.popup")
---    local popup_id, popup_opts = popup.create(plugin_list, {
---        border = true,
---        padding = {0, 3, 0, 3}
---    })
---
---    state.set_popup_id(popup_id)
---    state.set_popup_opts(popup_opts)
---
---    print(popup_id)
---
---    vim.cmd(
---        "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_id(), true)")
---    vim.cmd(
---        "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_opts().border.win_id, true)")
+   local popup = require("plenary.popup")
+   local popup_id, popup_opts = popup.create(plugin_list, {
+       border = true,
+       padding = {0, 3, 0, 3}
+   })
+
+   state.set_popup_id(popup_id)
+   state.set_popup_opts(popup_opts)
+
+   print(popup_id)
+
+   vim.cmd(
+       "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_id(), true)")
+   vim.cmd(
+       "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_opts().border.win_id, true)")
 end
 
 return {open_popup = open_popup, close_popup = close_popup}
