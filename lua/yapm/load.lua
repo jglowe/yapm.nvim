@@ -19,11 +19,11 @@ local state = require("yapm.state")
 
 local load_plugin = function(plugin)
     if vim.v.vim_did_enter == 1 then
-        -- Modifies 'runtimepath' _and_ sources files.
+        -- Adds the optional plugin to the runtime path and sources it now
         vim.cmd('packadd ' .. plugin)
     else
-        -- Just modifies 'runtimepath'; Vim will source the files later as part
-        -- of |load-plugins| process.
+        -- Adds the optional plugin to the runtime path and sources it later as
+        -- a part of the startup process
         vim.cmd('packadd! ' .. plugin)
     end
 end
