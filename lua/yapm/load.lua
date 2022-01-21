@@ -28,11 +28,21 @@ local load_plugin = function(plugin)
 end
 
 local load = function(plugin)
+
+    -- Support both github_user/plugin_name and plugin_name
+    local slash_index = string.find(plugin, "/")
+    local plugin_name
+    if slash_index ~= nil then
+        plugin_name = string.sub(plugin, slash_index + 1, string.len(plugin))
+    else
+        plugin_name = plugin
+    end
+
     -- keep track of the plugins that are loaded and prevent them from being
     -- loaded twice
-    if not state.is_plugin_loaded(plugin) then
-        load_plugin(plugin)
-        state.add_loaded_plugin(plugin)
+    if not state.is_plugin_loaded(plugin_name) then
+        load_plugin(plugin_name)
+        state.add_loaded_plugin(plugin_name)
     end
 end
 
