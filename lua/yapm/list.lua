@@ -47,6 +47,7 @@ local open_popup = function()
     -- state.set_popup_opts(popup_opts)
 
     print(popup_id)
+    vim.api.nvim_set_current_win(popup_id)
 
     vim.cmd(
         "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_id(), true)")
