@@ -13,9 +13,8 @@
 --
 -- List the plugins that are loaded in a popup gui
 --------------------------------------------------------------------------------
-local load_plugin = require("yapm.load")
-local state = require("yapm.state")
 
+local state = require("yapm.state")
 
 local close_popup = function()
     pcall(vim.api.nvim_win_close, state.get_popup_id(), true)
@@ -25,28 +24,34 @@ end
 
 local open_popup = function()
 
-    load_plugin("plenary.nvim")
-
     local plugin_list = state.get_loaded_plugins()
 
     table.insert(plugin_list, 1, "Installed Plugins")
     table.insert(plugin_list, 2, "")
 
-   local popup = require("plenary.popup")
-   local popup_id, popup_opts = popup.create(plugin_list, {
-       border = true,
-       padding = {0, 3, 0, 3}
-   })
+    local bufnr = vim.api.nvim_create_buf(false, true)
+    assert(bufnr, "Failed to create buffer")
+    vim.api.nvim_buf_set_option(bufnr, "bufhidden", "wipe")
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, plugin_list)
 
-   state.set_popup_id(popup_id)
-   state.set_popup_opts(popup_opts)
+    local window_options = {}
+    window_options.relative = "editor"
+    window_options.style = "minimal"
+    window_options.width = 30
+    window_options.height = 30
+    window_options.col = math.floor((vim.o.columns - window_options.width) / 2)
+    window_options.row = math.floor((vim.o.lines - window_options.height) / 2)
 
-   print(popup_id)
+    local popup_id = vim.api.nvim_open_win(bufnr, false, window_options)
+    state.set_popup_id(popup_id)
+    -- state.set_popup_opts(popup_opts)
 
-   vim.cmd(
-       "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_id(), true)")
-   vim.cmd(
-       "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_opts().border.win_id, true)")
+    print(popup_id)
+
+    vim.cmd(
+        "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_id(), true)")
+    -- vim.cmd(
+    --     "autocmd BufLeave <buffer> ++once lua pcall(vim.api.nvim_win_close, require('yapm.state').get_popup_opts().border.win_id, true)")
 end
 
 return {open_popup = open_popup, close_popup = close_popup}
