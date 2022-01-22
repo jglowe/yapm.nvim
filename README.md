@@ -49,18 +49,18 @@ git commit -m "Added YAPM package manager"
 ```
 
 ```lua
-    require("yapm").setup({
-        add_new_plugins = true,
-        git = {
-            executable = "git",
-            repo_path = vim.env.HOME,
-            packages_path = ".config/nvim/pack/all/opt",
-            add = {
-                options = "--git-dir=$HOME/.dotfiles/ --work-tree=$HOME",
-            },
-            update = {command = "pull", options = ""}
-        }
-    })
+require("yapm").setup({
+    add_new_plugins = true,
+    git = {
+        executable = "git",
+        repo_path = vim.env.HOME,
+        packages_path = ".config/nvim/pack/all/opt",
+        add = {
+            options = "--git-dir=$HOME/.dotfiles/ --work-tree=$HOME",
+        },
+        update = {command = "pull", options = ""}
+    }
+})
 ```
 
 ## Usage
@@ -72,7 +72,6 @@ yapm.load("github/plugin")
 ```
 
 ## TODOS
-- Remove plenary dependency for popups
 - Use popup for adding plugins
 - Add lazy loading for plugins
 - Add option to remove a plugin
