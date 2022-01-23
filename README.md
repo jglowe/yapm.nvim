@@ -18,7 +18,7 @@ your dotfiles and using git submodules. Below are some:
   - https://www.youtube.com/watch?v=tkUllCAGs3c
   - https://alexpearce.me/2016/02/managing-dotfiles-with-stow/
 
-This Plugin essentially is a glorified wrapper for vim's builtin package
+This plugin essentially is a glorified wrapper for vim's builtin package
 management system.
 
 The TLDR for the builtin package management system is as

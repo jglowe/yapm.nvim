@@ -44,8 +44,8 @@ local load = function(plugin)
     -- If enabled and the plugin name inclues the git user/path, it will add
     -- newly specified plugins via the add function
     if settings.add_new_plugins and slash_index ~= nil then
-        local plugin_folder = settings.git.repo_path .. "/" ..
-                                  settings.git.packages_path .. "/" ..
+        local plugin_folder = settings.repo_path .. "/" ..
+                                  settings.plugin_path .. "/" ..
                                   plugin_name
         if vim.fn.isdirectory(plugin_folder) == 0 then add(plugin) end
     end

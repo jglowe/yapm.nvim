@@ -21,11 +21,12 @@ local state = require("yapm.state")
 local setup = function(settings)
     local defaults = {
         add_new_plugins = true,
+        repo_path = vim.env.HOME,
+        plugin_path = ".config/nvim/pack/all/opt",
         git = {
             executable = "git",
-            repo_path = vim.env.HOME,
-            packages_path = ".config/nvim/pack/all/opt",
             add = {
+                command = "submodule add",
                 options = "--git-dir=$HOME/.dotfiles/ --work-tree=$HOME",
             },
             update = {command = "pull", options = ""}
@@ -41,7 +42,7 @@ local setup = function(settings)
     vim.cmd("command! -nargs=1 YAPMAdd    lua require('yapm').add(<f-args>)")
     vim.cmd(
         "command! -nargs=? YAPMUpdate lua require('yapm').update(<f-args>)")
-    vim.cmd("command!          YAPMList   lua require('yapm').list.open_popup()")
+    vim.cmd("command!          YAPMList   lua require('yapm').list()")
 end
 
 return setup

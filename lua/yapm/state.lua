@@ -71,6 +71,14 @@ local set_popup_id = function(popup_id)
     _G.plugin__state["popup_id"] = popup_id
 end
 
+local get_content_function = function()
+    return _G.plugin__state["content_function"]
+end
+
+local set_content_function = function(fn)
+    _G.plugin__state["content_function"] = fn
+end
+
 local state = {
     get_settings = get_settings,
     set_settings = set_settings,
@@ -79,6 +87,8 @@ local state = {
     add_loaded_plugin = add_loaded_plugin,
     get_popup_id = get_popup_id,
     set_popup_id = set_popup_id,
+    get_content_function = get_content_function,
+    set_content_function = set_content_function,
 }
 
 return state

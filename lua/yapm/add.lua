@@ -13,26 +13,69 @@
 --
 -- Adds a plugin via git
 --------------------------------------------------------------------------------
+local state = require("yapm.state")
+local popup = require("yapm.popup")
+
+local split = function(str, delimiter)
+    local result = {}
+    local from = 1
+    local delim_from, delim_to = string.find(str, delimiter, from)
+    while delim_from do
+        table.insert(result, string.sub(str, from, delim_from - 1))
+        from = delim_to + 1
+        delim_from, delim_to = string.find(str, delimiter, from)
+    end
+    table.insert(result, string.sub(str, from))
+    return result
+end
+
 local add = function(plugin)
-    local settings = require("yapm.get_settings")()
+    local settings = state.get_settings()
     local slash_index = string.find(plugin, "/")
     local plugin_name = string.sub(plugin, slash_index + 1, string.len(plugin))
-    local plugin_destination = settings.git.packages_path .. "/" ..
-                                   plugin_name
+    local plugin_destination = settings.plugin_path .. "/" .. plugin_name
 
-    if vim.fn.isdirectory(plugin_destination) == 0 then
+    if vim.fn.isdirectory(settings.repo_path .. "/" .. plugin_destination) == 0 then
         local git_executable = settings.git.executable
         local git_options = settings.git.add.options
-        local repo_path = settings.git.repo_path
+        local repo_path = settings.repo_path
         local plugin_url = "https://github.com/" .. plugin .. ".git"
-        local output = vim.fn.system("pushd " .. repo_path .. "; " ..
-                                         git_executable .. " " .. git_options ..
-                                         " submodule add --name " .. plugin_name ..
-                                         " " .. plugin_url .. " " ..
-                                         plugin_destination)
-        print(output)
+
+        local shell_command = "cd " .. repo_path .. "; " .. git_executable ..
+                                  " " .. git_options .. " submodule add --name " ..
+                                  plugin_name .. " " .. plugin_url .. " " ..
+                                  plugin_destination .. " 2>&1"
+        local output = vim.fn.systemlist(shell_command)
+
+        local content_function = function()
+            local lines = {"", " Loading Plugin " .. plugin_name, ""}
+            for _, line in pairs(output) do
+                table.insert(lines, " " .. line)
+            end
+            table.insert(lines, "")
+            table.insert(lines, " Finished")
+            table.insert(lines, "")
+            return lines
+        end
+
+        if state.get_popup_id() ~= nil then
+            local current_lines = state.get_content_function()()
+            for _, line in pairs(content_function()) do
+                table.insert(current_lines, line)
+            end
+            local fn = function()
+                return current_lines
+            end
+            popup.close()
+            popup.open(fn)
+        else
+            popup.open(content_function)
+        end
     else
-        print("Plugin is already there")
+        local content_functon = function()
+            return {"", " Plugin " .. plugin_name .. " is already there", ""}
+        end
+        popup.open(content_functon)
     end
 end
 
