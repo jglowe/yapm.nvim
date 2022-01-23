@@ -95,7 +95,6 @@ local open_popup = function()
     local popup_id = vim.api.nvim_open_win(bufnr, false,
                                            get_popup_options(#buf_contents))
     state.set_popup_id(popup_id)
-
     print(popup_id)
 
     vim.api.nvim_set_current_win(popup_id)

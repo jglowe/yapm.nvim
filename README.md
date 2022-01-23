@@ -50,7 +50,8 @@ git commit -m "Added YAPM package manager"
 
 ```lua
 require("yapm").setup({
-    add_new_plugins = true,
+    add_new_plugins = true, -- Adds the plugins as a submodules to your dotfiles
+                            -- if they are not found in the plugins folder
     git = {
         executable = "git",
         repo_path = vim.env.HOME,
@@ -71,6 +72,18 @@ local yapm = require("yapm")
 yapm.load("github/plugin")
 ```
 
+Vim commands
+```
+-- List the currently loaded plugins via a popup
+:YAPMList
+
+-- Adds the plugin as a submodule to your dotfiles
+:YAPMAdd github/plugin
+
+
+
+```
+
 ## TODOS
 - Use popup for adding plugins
 - Add lazy loading for plugins
@@ -79,3 +92,4 @@ yapm.load("github/plugin")
 - Use popup for updating plugins
 - Get main branch when updating plugins
 - Add option to checkout latest tag
+- Add removing plugins option
