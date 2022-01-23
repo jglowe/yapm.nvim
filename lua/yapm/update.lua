@@ -15,9 +15,12 @@
 --
 -- This file contains the functions needed to update the plugins
 --------------------------------------------------------------------------------
+local state = require("yapm.state")
+local popup = require("yapm.popup")
+
 local update = function(name)
     local plugins_folder = vim.fn.stdpath("config") .. "/pack/all/opt/"
-    local settings = require("yapm.state").get_settings()
+    local settings = state.get_settings()
     local to_update = {}
 
     if name == nil then
@@ -26,8 +29,6 @@ local update = function(name)
         for str in string.gmatch(ls_output, "([^\n]+)") do
             table.insert(to_update, str)
         end
-
-        print(vim.inspect(to_update))
     else
 
         local slash_index = string.find(name, "/")
@@ -40,12 +41,39 @@ local update = function(name)
         local git_executable = settings.git.executable
         local git_options = settings.git.update.options
         local git_command = settings.git.update.command
-        local output = vim.fn.system("pushd " .. plugin_folder .. "; " ..
-                                         git_executable .. " " .. git_options ..
-                                         " " .. git_command .. "; popd")
+        local output = vim.fn.systemlist(
+                           "cd " .. plugin_folder .. "; " .. git_executable ..
+                               " " .. git_options .. " " .. git_command)
 
-        print(output)
+        table.insert(output, 1, "Updating " .. plugin)
+        table.insert(output, 2, "")
 
+        if state.get_popup_id() == nil then
+            local content_function = function() return output end
+            popup.open(content_function)
+        else
+            local bufnr = vim.api.nvim_win_get_buf(state.get_popup_id())
+            local current_lines = vim.api
+                                      .nvim_buf_get_lines(bufnr, 0, -1, false)
+
+            for _, line in pairs(output) do
+                table.insert(current_lines, line)
+            end
+
+            local window_height
+            if math.floor(vim.opt.lines:get() * .8) < #current_lines then
+                window_height = math.floor(vim.opt.lines:get() * .8)
+            else
+                window_height = #current_lines
+            end
+            local content_function = function() return current_lines end
+            -- vim.api.nvim_win_set_config(state.get_popup_id(), {
+            --     row = math.floor((vim.opt.lines:get() - window_height) / 2)
+            -- })
+            vim.api.nvim_win_set_height(state.get_popup_id(), window_height)
+            state.set_content_function(content_function)
+            vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, current_lines)
+        end
     end
 end
 
