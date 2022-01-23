@@ -1,18 +1,21 @@
 # Yet Another Plugin Magager (yapm.nvim)
 
-A package manager for managing plugins via the builtin plugin management system
-with git submodules.
+A minimal plugin manager for managing plugins via the builtin plugin management
+system with git submodules.
 
-## Philosophy
+## Use Case
 
-The idea behind this plugin manager is to have git manage your plugins via
-submodules in your dotfiles repo. There are some execellent tutorials out there
-detailing how to use git to manage your dotfiles and using git submodules.
+The use case for this plugin manager is to have git manage your plugins via
+submodules in your dotfiles repo.
+
+There are some execellent tutorials out there detailing how to use git to manage
+your dotfiles and using git submodules.
 
 This Plugin essentially is a glorified wrapper for vim's builtin package
 management system. If you aren't familiar with it, I would suggest reading about
 it. The package manager makes use of the builtin package manager's optional
-plugins. The following logic is the most essential part of the plugin:
+plugins. If you are a minimalist you can stop here and grab the following logic,
+which is the most essential part of the plugin:
 
 ```lua
 local load_plugin = function(plugin)
@@ -28,6 +31,9 @@ end
 ```
 
 It is responsible for loading the specified optional plugin.
+
+The rest of the plugin is some utility functions for running git and listing
+loaded plugins.
 
 ## Reasons to use this plugin
 - If you manage your dotfiles with git
@@ -80,7 +86,8 @@ Vim commands
 -- Adds the plugin as a submodule to your dotfiles
 :YAPMAdd github/plugin
 
-
+-- Updates the plugin submodules to origin/default_branch
+:YAPMUpdate
 
 ```
 
