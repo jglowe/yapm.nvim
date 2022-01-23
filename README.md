@@ -30,7 +30,7 @@ plugin in your vim config you specify `packadd! plugin_name`. See
 
 The package manager provides a wrapper for loading plugins using the builtin
 plugin manager. If you are a minimalist you can stop here and grab the following
-logic, which is the most essential part of the plugin:
+logic, which is the most essential part of the plugin from `lua/yapm/load.lua`.
 
 ```lua
 local load_plugin = function(plugin)
