@@ -23,10 +23,10 @@ management system.
 
 The TLDR for the builtin package management system is as
 follows. Vim auto loads plugins under the
-`vim.fn.stdpath("config") .. "/pack/*/start/*` path and optionally loads plugins
-under the `vim.fn.stdpath("config") .. "/pack/*/opt/*`. To load a plugin in your
-vim config you specify `packadd! plugin_name`. See `|:help packages|` for more
-details.
+`vim.fn.stdpath("config") .. "/pack/*/start/*"` path and optionally loads
+plugins under the `vim.fn.stdpath("config") .. "/pack/*/opt/*"`. To load a
+plugin in your vim config you specify `packadd! plugin_name`. See
+`|:help packages|` for more details.
 
 The package manager provides a wrapper for loading plugins using the builtin
 plugin manager. If you are a minimalist you can stop here and grab the following
